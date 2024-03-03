@@ -1,78 +1,91 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import Students from './components/students';
-import { getStudents } from './components/service';
+import React from "react";
+import { render, screen, waitFor } from "@testing-library/react";
+import App from "./App";
+import * as service from "./components/service";
 
+// test('renders learn react link', () => {
+//   render(<App />);
+//   const linkElement = screen.getByText(/learn react/i);
+//   expect(linkElement).toBeInTheDocument();
+// });
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+jest.mock("./components/service");
+
+test("render students data on fetching", async () => {
+  service.getStudents.mockResolvedValue([
+    {
+      name: "rahul",
+      rollNumber: 1,
+      trainings: ["JAVA", "HTML"],
+      email: "rahul21@gmail.com",
+    },
+    {
+      name: "manish",
+      rollNumber: 2,
+      trainings: ["JAVA", "HTML"],
+      email: "manish21@gmail.com",
+    },
+    {
+      name: "rohit",
+      rollNumber: 3,
+      trainings: ["HTML"],
+      email: "rohit77@gmail.com",
+    },
+  ]);
+  const component = render(<App />);
+
+  await waitFor(() => {
+    expect(screen.getByText(/Name/i)).toBeInTheDocument();
+    expect(screen.getByText(/Trainings/i)).toBeInTheDocument();
+    expect(screen.getByText(/Email/i)).toBeInTheDocument();
+  });
+  expect(component.asFragment()).toMatchSnapshot();
+
+  screen.logTestingPlaygroundURL();
 });
 
-jest.mock('./components/service', ()=>({
-  getStudents: jest.fn(),
-}));
-describe('Students component', ()=>{
-  const mockedStudents = [{
-    name: 'rahul',
-    "rollNumber": 1,
-    address: {
-        city: 'Pune',
-        zipcode: 411037
-    },
-    trainings: ['JAVA', 'HTML'],
-    level: 'Intermediate',
-    email : 'rahul21@gmail.com'
-},
-{
-    name: 'manish',
-    "rollNumber": 2,
-    address: {
-        city: 'Pune',
-        zipcode: 411037
-    },
-    trainings: ['JAVA', 'HTML'],
-    level: 'Basic',
-    email : 'manish21@gmail.com'
-},
-{
-    name: 'rohit',
-    "rollNumber": 3,
-    address: {
-        city: 'Pune',
-        zipcode: 411037
-    },
-    trainings: ['HTML'],
-    level: 'Advance',
-    email : 'rohit77@gmail.com'
+test("renders error message when students data is not fetched", async () => {
+  service.getStudents.mockResolvedValue({ error: "failed" });
 
-}];
+  render(<App />);
 
-beforeEach(()=>{
-  getStudents.mockReset();
-})
-  it('renders students data in table', async()=>{
-    render(<Students />);
-  getStudents.mockResolvedValue(mockedStudents);
-  
-  await waitFor(()=>{
-    // expect(screen.getByText(/Name/i)).toBeInTheDocument();
-    // expect(screen.getByText(/RollNumber/i)).toBeInTheDocument();
-    // expect(screen.getByText(/Trainings/i)).toBeInTheDocument();
-    // expect(screen.getByText(/Email/i)).toBeInTheDocument();
-    mockedStudents.forEach((student)=>{
-      const studentsTable = screen.getByText(student.name);
-      expect(studentsTable).toBeInTheDocument();
-      const studentsTablerow2 = screen.getByText(student.rollNumber);
-      expect(studentsTablerow2).toBeInTheDocument();
-      const studentsTablerow3 = screen.getByText(student.trainings);
-      expect(studentsTablerow3).toBeInTheDocument();
-      const studentsTablerow4 = screen.getByText(student.email);
-      expect(studentsTablerow4).toBeInTheDocument();
-
-    });
-
+  await waitFor(() => {
+    expect(
+      screen.getByText("Failed to load Students Data")
+    ).toBeInTheDocument();
   });
-  })
-   
-})
+});
+
+// it('checkif the students renders from the api', async()=>{
+//   global.fetch = jest.fn().mockResolvedValue({
+//     json: jest.fn().mockResolvedValue({ students: [{
+//       name: 'rahul',
+//       "rollNumber": 1,
+//       trainings: ['JAVA', 'HTML'],
+//       email : 'rahul21@gmail.com'
+//   },
+//   {
+//       name: 'manish',
+//       "rollNumber": 2,
+//       trainings: ['JAVA', 'HTML'],
+//       email : 'manish21@gmail.com'
+//   }] }),
+//   });
+
+//   render(<App />);
+//   await waitFor(()=>{
+//     screen.getByText("roll Number")
+//   })
+//   expect(global.fetch).toHaveBeenCalledWith("http://localhost:5555/students");
+// });
+
+// test('renders buttons and table headings on UI', () => {
+//   render(<App />);
+
+//   const tableHeadings = ['Name', 'Roll Number', 'Trainings', 'Email', 'Actions'];
+//   tableHeadings.forEach((heading) => {
+//     expect(screen.getByText(heading)).toBeInTheDocument();
+//   });
+//   expect(screen.getByText('Add New Student')).toBeInTheDocument();
+//   expect(screen.getByText('Change New Student')).toBeInTheDocument();
+// });
