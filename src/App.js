@@ -76,10 +76,21 @@ function App() {
   };
 
   const onBtnclick = (student) => {
-    addStudents(student).then(() => {
-      setRefresh(!refresh);
-      setshowAddStudentForm(false);
-    });
+    const expression = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+    if(!expression.test(student.email)){
+      window.confirm("Invalid Email Address");
+      return;
+    }
+      addStudents(student).then(() => {
+        setRefresh(!refresh);
+        setshowAddStudentForm(false);
+      });
+    
+
+    // addStudents(student).then(() => {
+    //   setRefresh(!refresh);
+    //   setshowAddStudentForm(false);
+    // });
   };
 
   const renderApp = () => {

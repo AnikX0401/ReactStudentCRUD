@@ -7,6 +7,7 @@ const AddStudent = (props) => {
   const [name, setName] = useState();
   const [rollNumber, setRollnumber] = useState();
   const [trainings, setTrainings] = useState();
+  const [email, setEmail] = useState()
 
   return (
     <div>
@@ -46,6 +47,18 @@ const AddStudent = (props) => {
             }}
           />
         </div>
+        <div className="field">
+          <label htmlFor="email">email:</label>
+          <input
+            type="text"
+            id="email"
+            value={email}
+            placeholder="Enter Email Address"
+            onChange={(event) => {
+              setEmail(event.target.value);
+            }}
+          />
+        </div>
       </div>
       <div>
         <button onClick={onBackclick}>back</button>
@@ -57,12 +70,14 @@ const AddStudent = (props) => {
               trainings: trainings.split(",").map((skill) => {
                 return skill.trim();
               }),
+              email: email
             });
           }}
         >
           Add
         </button>
       </div>
+      
     </div>
   );
 };
