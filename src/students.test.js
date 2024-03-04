@@ -1,9 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import Students from "./components/students";
+import Students from "./components/Students";
 
-// import { rest } from "msw";
-// import { setServer } from "msw/node";
     const Mockstudents = [
         {
         name: 'rahul',
@@ -68,19 +66,9 @@ import Students from "./components/students";
           // screen.getByTestId(student.trainings)
           screen.getByText(student.email)
 
-          screen.logTestingPlaygroundURL();
         })
 
     });
-
-
-
-//     render(<Students students={students} />);
-
-//     expect(screen.getByText('rahul')).toBeInTheDocument();
-//     expect(screen.getByText('1')).toBeInTheDocument();
-//     expect(screen.getByText('rahul21@gmail.com')).toBeInTheDocument();
-// })
 
 
 

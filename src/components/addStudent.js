@@ -10,6 +10,7 @@ const AddStudent = (props) => {
   const [email, setEmail] = useState()
 
   return (
+    <>
     <div>
       Add New Student
       <div>
@@ -79,6 +80,7 @@ const AddStudent = (props) => {
       </div>
       
     </div>
+    </>
   );
 };
 

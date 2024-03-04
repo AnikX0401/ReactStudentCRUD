@@ -5,6 +5,26 @@ exports[`render students data on fetching 1`] = `
   <div
     class="App"
   >
+    <nav>
+      <ul>
+        <li>
+          <a
+            href="/"
+            style="color: rgb(12, 93, 199); padding: 5px; font-size: 25px;"
+          >
+            Home
+          </a>
+        </li>
+        <li>
+          <a
+            href="/add"
+            style="color: rgb(12, 93, 199); padding: 5px; font-size: 25px;"
+          >
+            Add
+          </a>
+        </li>
+      </ul>
+    </nav>
     <div
       class="student-list"
     >

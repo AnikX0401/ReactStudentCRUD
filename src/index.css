@@ -48,3 +48,21 @@ th, td {
 .AddStudentForm {
   margin-top: 20px;
 }
+
+.navigation{
+  padding: 10px;
+}
+li{
+  display: inline;
+  margin-right: 15px;
+}
+
+.nav.link{
+  padding: 7px;
+  
+}
+
+
+
+
+

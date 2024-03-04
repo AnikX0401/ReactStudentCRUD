@@ -3,7 +3,7 @@ import { useState } from "react";
 const EditStudent = (props) => {
   const { onEditBackclick, student, onEditBtnClick } = props;
   const [editStudent, setEditStudent] = useState(student);
-
+  console.log("Stu:::", student)
   return (
     <div>
       Edit Student

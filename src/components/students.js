@@ -6,7 +6,6 @@ const Students = (props) => {
     onEditStudent,
   } = props;
 
-  console.log("Studd::", students);
   return (
     <div className="student-list">
       <h1>Students</h1>

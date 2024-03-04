@@ -37,12 +37,6 @@ test('renders the editStudent component with values', () => {
     />)
     const nameInput = screen.getByLabelText("name:")
     expect(nameInput).toHaveValue(Mockstudents[0].name)
-    //    const rollnoInput = screen.getByLabelText("rollNumber:")
-    //    expect(rollnoInput).toHaveValue(Mockstudents[0].rollNumber.toString());
-
-
-    // const trainingsInput = screen.getByLabelText("trainings:")
-    // expect(trainingsInput).toHaveValue(Mockstudents[0].trainings);
 });
 
 test("initially renders disabled roll number", () => {
@@ -53,7 +47,6 @@ test("initially renders disabled roll number", () => {
     const rollNumberInput = screen.getByLabelText("rollNumber:")
     expect(rollNumberInput).toBeDisabled();
 
-    screen.logTestingPlaygroundURL();
 })
 
 test("renders the saved values on save button click", () => {
