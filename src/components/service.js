@@ -11,8 +11,21 @@ async function getStudents() {
   }
 }
 
+async function getStudentByRollNumber(rollNumber) {
+  try {
+    const response = await fetch(`http://localhost:5555/student/${rollNumber}`);
+    const student = await response.json();
+    return student;
+  } catch (error) {
+    console.error("Failed to load Students Data:", error);
+    return {
+      error: "failed",
+    };
+  }
+}
+
 async function addStudents(student) {
-  try{
+  try{  
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
@@ -28,7 +41,7 @@ async function addStudents(student) {
   return {
     error: "failed"
   };
-}
+};
 }
 
 async function deleteStudent(rollNumber) {
@@ -39,20 +52,18 @@ async function deleteStudent(rollNumber) {
   const students = await response.json();
   return students;
 } catch(error){
-  console.log("failed to Delete student:", error);
+  console.error("failed to Delete student:", error);
   return{
     error: "failed"
   }
 }
-}
+};
 
 async function editStudent(student) {
   try{
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
-
   const raw = JSON.stringify(student);
-
   const requestOptions = {
     method: "PUT",
     headers: myHeaders,
@@ -71,7 +82,7 @@ async function editStudent(student) {
     return{
       error: "failed"
     }
-  }
-}
+  };
+};
 
-export { getStudents, addStudents, deleteStudent, editStudent };
+export { getStudents, addStudents, deleteStudent, editStudent, getStudentByRollNumber };

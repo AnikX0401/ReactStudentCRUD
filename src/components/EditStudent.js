@@ -1,65 +1,87 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getStudentByRollNumber, editStudent } from "./service";
 
-const EditStudent = (props) => {
-  const { onEditBackclick, student, onEditBtnClick } = props;
-  const [editStudent, setEditStudent] = useState(student);
-  console.log("Stu:::", student)
+const EditStudent = () => {
+  const [student, setStudent] = useState();
+  let { rollNumber } = useParams();
+  const navigate = useNavigate();
+  useEffect(() => {
+    getStudentByRollNumber(rollNumber).then((student) => {
+      setStudent(student);
+    });
+  }, [rollNumber]);
+
   return (
     <div>
       Edit Student
-      <div>
-        <div className="field">
-          <label htmlFor="name">name:</label>
-          <input
-            type="text"
-            id="name"
-            value={editStudent.name}
-            onChange={(event) => {
-              setEditStudent({
-                ...editStudent,
-                name: event.target.value,
-              });
-            }}
-          />
-        </div>
+      {student && (
+        <div>
+          <div className="field">
+            <label htmlFor="name">name:</label>
+            <input
+              type="text"
+              id="name"
+              value={student.name}
+              onChange={(event) => {
+                setStudent({
+                  ...student,
+                  name: event.target.value,
+                });
+              }}
+            />
+          </div>
 
-        <div className="field">
-          <label htmlFor="rollno">rollNumber:</label>
-          <input
-            type="text"
-            id="rollno"
-            value={editStudent.rollNumber}
-            disabled="true"
-          />
-        </div>
-        <div className="field">
-          <label htmlFor="trainings">trainings:</label>
-          <input
-            type="text"
-            id="trainings"
-            value={editStudent.trainings}
-            placeholder="Enter comma Seperated Skills"
-            onChange={(event) => {
-              setEditStudent({
-                ...editStudent,
-                trainings: event.target.value,
+          <div className="field">
+            <label htmlFor="rollno">rollNumber:</label>
+            <input
+              type="text"
+              id="rollno"
+              value={student.rollNumber}
+              disabled="true"
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="trainings">trainings:</label>
+            <input
+              type="text"
+              id="trainings"
+              value={student.trainings}
+              placeholder="Enter comma Seperated Skills"
+              onChange={(event) => {
+                setStudent({
+                  ...student,
+                  trainings: event.target.value,
+                });
+              }}
+            />
+          </div>
+          <button
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            back
+          </button>
+          <button
+            onClick={() => {
+              let trainings = student.trainings;
+              if (typeof trainings === "string") {
+                trainings = trainings.split(",").map((skill) => skill.trim());
+              }
+              editStudent({
+                name: student.name,
+                rollNumber: Number(student.rollNumber),
+                trainings,
+              }).then(() => {
+                navigate("/");
               });
             }}
-          />
+          >
+            Save
+          </button>
         </div>
-        <button onClick={onEditBackclick}>back</button>
-        <button
-          onClick={() => {
-            onEditBtnClick({
-              name: editStudent.name,
-              rollNumber: Number(editStudent.rollNumber),
-              trainings: editStudent.trainings.split(",").map((skill) => skill.trim()),
-            });
-          }}
-        >
-          Save
-        </button>
-      </div>
+      )}
     </div>
   );
 };

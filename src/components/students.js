@@ -1,14 +1,43 @@
-const Students = (props) => {
-  const {
-    students = [],
-    addNewStudent,
-    ondeleteStudent,
-    onEditStudent,
-  } = props;
+import { useEffect, useState } from "react";
+import { deleteStudent, getStudents } from "./service";
+import { useNavigate } from "react-router-dom";
+
+const Students = () => {
+  const [studentState, setStudents] = useState([]);
+  const [error, setError] = useState(false);
+  const navigate = useNavigate();
+  const onEditStudent = (student) => {
+    navigate(`/edit/${student.rollNumber}`);
+  };
+  function getStudentsList() {
+    getStudents().then((res) => {
+      if (res?.error === "failed") {
+        setError(true);
+      } else {
+        setStudents(res);
+        setError(false);
+      }
+    });
+  }
+  useEffect(() => {
+    getStudentsList();
+  }, []);
+
+  const onDeleteStudent = (rollNumber) => {
+    if (window.confirm("Are you sure, you want to Delete this record?")) {
+      deleteStudent(rollNumber).then(() => {
+        getStudentsList();
+      });
+    }
+  };
+  if (error) {
+    return <h2>Failed to load Students Data</h2>;
+  }
 
   return (
     <div className="student-list">
       <h1>Students</h1>
+
       <table>
         <thead>
           <tr>
@@ -20,7 +49,7 @@ const Students = (props) => {
           </tr>
         </thead>
         <tbody>
-          {students.map((student, index) => (
+          {studentState.map((student, index) => (
             <tr key={`${student?.email}_${index}`}>
               <td>{student.name}</td>
               <td>{student.rollNumber}</td>
@@ -31,7 +60,7 @@ const Students = (props) => {
               <td>
                 <button
                   onClick={() => {
-                    ondeleteStudent(student.rollNumber);
+                    onDeleteStudent(student.rollNumber);
                   }}
                 >
                   Delete
@@ -48,7 +77,6 @@ const Students = (props) => {
           ))}
         </tbody>
       </table>
-      <button onClick={addNewStudent}>Add New Student</button>
     </div>
   );
 };

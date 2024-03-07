@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`render students data on fetching 1`] = `
+exports[`Students app render students data on fetching 1`] = `
 <DocumentFragment>
   <div
     class="App"

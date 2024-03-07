@@ -4,17 +4,15 @@
 
 body{
   text-align: center;
-
 }
 
 .table-container{
   display: flex;
   justify-content: space-between;
-
 }
 
 .student-list{
-  padding: 40px;
+  padding: 30px;
   text-align: center;
 } 
 
@@ -39,6 +37,12 @@ table {
   margin-top: 10px;
 }
 
+th{
+  background-color: #f5f2f2;
+  font-weight: bold;
+}
+
+
 th, td {
   border: 1px solid #dddddd8c;
   padding: 5px;
@@ -51,15 +55,23 @@ th, td {
 
 .navigation{
   padding: 10px;
+  background-color: #333333af;
+
 }
+
 li{
   display: inline;
   margin-right: 15px;
 }
 
-.nav.link{
+.nav-link{
   padding: 7px;
+  color: rgba(255, 255, 255, 0.904);
   
+}
+
+.nav-link:hover{
+  background-color: #edc4adf0;
 }
 
 
