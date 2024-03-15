@@ -1,49 +1,12 @@
-import { useState, useEffect } from "react";
+import React from "react";
 import "./index.css";
-import {
-  getStudents,
-} from "./components/service";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import Students from "./components/Students";
+import EditStudent from "./components/EditStudent";
+import AddStudent from "./components/AddStudent";
 
-function App() {
-  // const [students, setStudents] = useState([]);
-  // const [refresh, setRefresh] = useState(false);
-  // const [error, setError] = useState(false);
-  // const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   getStudents().then((res) => {
-  //     if (res?.error === "failed") {
-  //       setError(true);
-  //     } else {
-  //       setError(false);
-  //       setStudents(res);
-  //     }
-  //   });
-  // }, [refresh]);
-
-  // const ondeleteStudent = (rollNumber) => {
-  //   if (window.confirm("Are you sure, you want to Delete this record?")) {
-  //     deleteStudent(rollNumber).then(() => {
-  //       setRefresh(!refresh);
-  //     });
-  //   }
-  // };
-
-  // const onEditStudent = (student) => {
-  //   navigate(`/edit/${student.rollNumber}`)
-  // };
-
-  const renderApp = () => {
-    
-    return (
-      <Students
-
-      />
-    );
-  };
+function HomePage() {
   return (
     <div className="App">
       <nav>
@@ -64,11 +27,21 @@ function App() {
               Add
             </Link>
           </li>
-          
         </ul>
       </nav>
-      {renderApp()}
+      <Students />
     </div>
+  );
+}
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/edit/:rollNumber" element={<EditStudent />} />
+        <Route path="/add" element={<AddStudent />} />
+      </Routes>
+    </Router>
   );
 }
 

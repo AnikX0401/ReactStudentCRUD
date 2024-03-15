@@ -50,7 +50,7 @@ const Students = () => {
         </thead>
         <tbody>
           {studentState.map((student, index) => (
-            <tr key={`${student?.email}_${index}`}>
+            <tr key={`${student?.email}_${index}`} data-testid="student-row">
               <td>{student.name}</td>
               <td>{student.rollNumber}</td>
               <td>

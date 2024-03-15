@@ -51,78 +51,8 @@ exports[`Students app render students data on fetching 1`] = `
             </th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>
-              rahul
-            </td>
-            <td>
-              1
-            </td>
-            <td>
-              JAVA,  HTML
-            </td>
-            <td>
-              rahul21@gmail.com
-            </td>
-            <td>
-              <button>
-                Delete
-              </button>
-              <button>
-                Edit
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              manish
-            </td>
-            <td>
-              2
-            </td>
-            <td>
-              JAVA,  HTML
-            </td>
-            <td>
-              manish21@gmail.com
-            </td>
-            <td>
-              <button>
-                Delete
-              </button>
-              <button>
-                Edit
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              rohit
-            </td>
-            <td>
-              3
-            </td>
-            <td>
-              HTML
-            </td>
-            <td>
-              rohit77@gmail.com
-            </td>
-            <td>
-              <button>
-                Delete
-              </button>
-              <button>
-                Edit
-              </button>
-            </td>
-          </tr>
-        </tbody>
+        <tbody />
       </table>
-      <button>
-        Add New Student
-      </button>
     </div>
   </div>
 </DocumentFragment>
