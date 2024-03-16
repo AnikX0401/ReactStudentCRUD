@@ -60,7 +60,7 @@ describe("Students app", () => {
     });
   });
 
-  fit("renders HomePage", () => {
+  it("renders HomePage", () => {
     render(<App />);
     expect(screen.getByText("Home")).toBeInTheDocument();
     expect(screen.getByText("Add")).toBeInTheDocument();
@@ -109,7 +109,7 @@ describe("Students app", () => {
       name: /add/i,
     });
 
-    screen.logTestingPlaygroundURL();
+    // screen.logTestingPlaygroundURL();
     fireEvent.click(saveBtn);
     await waitFor(() => {
       screen.getByText("Hey duplicate email id");
@@ -123,6 +123,7 @@ describe("Students app", () => {
   });
 
   it("deletes a student on clicking delete button", async () => {
+    window.history.pushState({}, "hello", "/");
     getStudents.mockResolvedValue([
       {
         name: "rahul",
@@ -160,7 +161,8 @@ describe("Students app", () => {
     expect(getStudents).toHaveBeenCalled();
   });
 
-  it("renders Edit form with values", async () => {
+  it("renders Edit Student form on edit click and edit student on save", async () => {
+    window.history.pushState({}, "hello", "/");
     getStudentByRollNumber.mockResolvedValue([
       {
         name: "rahul",
@@ -176,29 +178,103 @@ describe("Students app", () => {
       },
     ]);
     render(<App />);
-
-    const nameInput = screen.getByLabelText("name:");
-    const rollNumberInput = screen.getByLabelText("rollNumber:");
-    const trainingsInput = screen.getByLabelText("trainings:");
-    const saveButton = screen.getByText("Save");
-
     await waitFor(() => {
-      expect(nameInput).toHaveValue("rahul");
-      expect(trainingsInput).toHaveValue("CSS");
+      expect(screen.getByText("rahul")).toBeInTheDocument();
+      expect(screen.getByText(1)).toBeInTheDocument();
     });
+    fireEvent.click(screen.getAllByRole("button", { name: /edit/i })[0]);
+    await waitFor(() => {
+      screen.getByLabelText("name:");
+    });
+    screen.logTestingPlaygroundURL();
+    const rollNumberInput = screen.getByLabelText("rollNumber:");
     expect(rollNumberInput).toBeDisabled();
 
-    fireEvent.change(nameInput, { target: { value: "rahul" } });
-    fireEvent.change(trainingsInput, { target: { value: "CSS" } });
+    fireEvent.change(
+      screen.getByRole("textbox", {
+        name: /name:/i,
+      }),
+      { target: { value: "New name" } }
+    );
 
-    expect(nameInput).toHaveValue("rahul");
-    expect(trainingsInput).toHaveValue("CSS");
-    fireEvent.click(saveButton);
+    fireEvent.change(
+      screen.getByRole("textbox", {
+        name: /trainings:/i,
+      }),
+      { target: { value: "JAVA, HTML, CSS" } }
+    );
+
+    editStudent.mockResolvedValueOnce();
+
+    fireEvent.click(screen.getByText("Save"));
+    const save = screen.getByRole("button", {
+      name: /save/i,
+    });
+    fireEvent.click(save);
     await waitFor(() => {
       expect(editStudent).toHaveBeenCalledWith({
-        name: "rahul",
-        trainings: ["CSS"],
+        name: "New name",
+        rollNumber: 1,
+        trainings: ["JAVA", "HTML", "CSS"],
       });
+      expect(getStudentByRollNumber).toHaveBeenCalled();
+    });
+  });
+
+  it("filter students on search input", async () => {
+    window.history.pushState({}, "hello", "/");
+    getStudents.mockResolvedValue([
+      {
+        name: "rahul",
+        rollNumber: 1,
+        trainings: ["JAVA", "HTML"],
+        email: "rahul21@gmail.com",
+      },
+      {
+        name: "manish",
+        rollNumber: 2,
+        trainings: ["JAVA", "HTML"],
+        email: "manish21@gmail.com",
+      },
+      {
+        name: "rohit",
+        rollNumber: 3,
+        trainings: ["HTML"],
+        email: "rohit77@gmail.com",
+      },
+    ]);
+    render(<App />);
+    fireEvent.change(screen.getByPlaceholderText("enter text here.."), {
+      target: { value: "rahul" },
+    });
+    await waitFor(() => {
+      expect(screen.getByText("rahul")).toBeInTheDocument();
+      expect(screen.queryByText("manish")).not.toBeInTheDocument();
+      expect(screen.queryByText("rohit")).not.toBeInTheDocument();
+    });
+    fireEvent.change(screen.getByPlaceholderText("enter text here.."), {
+      target: { value: "" },
+    });
+    await waitFor(() => {
+      expect(screen.getByText("rahul")).toBeInTheDocument();
+      expect(screen.getByText("manish")).toBeInTheDocument();
+      expect(screen.getByText("rohit")).toBeInTheDocument();
+    });
+    fireEvent.change(screen.getByPlaceholderText("enter text here.."), {
+      target: { value: "2" },
+    });
+    await waitFor(() => {
+      expect(screen.queryByText("rahul")).not.toBeInTheDocument();
+      expect(screen.getByText("manish")).toBeInTheDocument();
+      expect(screen.queryByText("rohit")).not.toBeInTheDocument();
+    });
+    fireEvent.change(screen.getByPlaceholderText("enter text here.."), {
+      target: { value: "" },
+    });
+    await waitFor(() => {
+      expect(screen.getByText("rahul")).toBeInTheDocument();
+      expect(screen.getByText("manish")).toBeInTheDocument();
+      expect(screen.getByText("rohit")).toBeInTheDocument();
     });
   });
 });

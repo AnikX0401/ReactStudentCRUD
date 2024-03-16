@@ -10,14 +10,14 @@ const AddStudent = () => {
   const [email, setEmail] = useState();
   const [showDuplicateEmailError, setShowDuplicateEmailError] = useState();
   const [showDuplicateRollNoError, setShowDuplicateRollNoError] = useState();
-  
+
   const onBackclick = () => {
     navigate("/");
   };
 
   const handleAddClick = (student) => {
     const expression = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    if(!expression.test(student.email)){
+    if (!expression.test(student.email)) {
       window.confirm("Invalid Email Id!");
       return;
     }
@@ -37,8 +37,8 @@ const AddStudent = () => {
       })
       .catch((err) => {
         console.log("AddStudent Error::", err);
-      })
-  }
+      });
+  };
 
   return (
     <>
@@ -115,7 +115,5 @@ const AddStudent = () => {
     </>
   );
 };
-
-
 
 export default AddStudent;
