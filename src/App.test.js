@@ -163,20 +163,12 @@ describe("Students app", () => {
 
   it("renders Edit Student form on edit click and edit student on save", async () => {
     window.history.pushState({}, "hello", "/");
-    getStudentByRollNumber.mockResolvedValue([
-      {
-        name: "rahul",
-        rollNumber: 1,
-        trainings: ["JAVA", "HTML"],
-        email: "rahul21@gmail.com",
-      },
-      {
-        name: "manish",
-        rollNumber: 2,
-        trainings: ["JAVA", "HTML"],
-        email: "manish21@gmail.com",
-      },
-    ]);
+    getStudentByRollNumber.mockResolvedValue({
+      name: "rahul",
+      rollNumber: 1,
+      trainings: ["JAVA", "HTML"],
+      email: "rahul21@gmail.com",
+    });
     render(<App />);
     await waitFor(() => {
       expect(screen.getByText("rahul")).toBeInTheDocument();
@@ -186,7 +178,6 @@ describe("Students app", () => {
     await waitFor(() => {
       screen.getByLabelText("name:");
     });
-    screen.logTestingPlaygroundURL();
     const rollNumberInput = screen.getByLabelText("rollNumber:");
     expect(rollNumberInput).toBeDisabled();
 
@@ -204,21 +195,20 @@ describe("Students app", () => {
       { target: { value: "JAVA, HTML, CSS" } }
     );
 
-    editStudent.mockResolvedValueOnce();
+    editStudent.mockResolvedValue();
 
     fireEvent.click(screen.getByText("Save"));
     const save = screen.getByRole("button", {
       name: /save/i,
     });
     fireEvent.click(save);
-    await waitFor(() => {
-      expect(editStudent).toHaveBeenCalledWith({
-        name: "New name",
-        rollNumber: 1,
-        trainings: ["JAVA", "HTML", "CSS"],
-      });
-      expect(getStudentByRollNumber).toHaveBeenCalled();
+
+    expect(editStudent).toHaveBeenCalledWith({
+      name: "New name",
+      rollNumber: 1,
+      trainings: ["JAVA", "HTML", "CSS"],
     });
+    expect(getStudentByRollNumber).toHaveBeenCalled();
   });
 
   it("filter students on search input", async () => {
