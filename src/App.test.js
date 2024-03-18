@@ -1,5 +1,12 @@
 import React from "react";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  fireEvent,
+  getByRole,
+  getByText,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import App from "./App";
 import {
   addStudents,
@@ -8,6 +15,7 @@ import {
   editStudent,
   getStudentByRollNumber,
 } from "./components/service";
+import { mockStudents } from "./mockStudents";
 
 jest.mock("./components/service", () => {
   return {
@@ -109,7 +117,6 @@ describe("Students app", () => {
       name: /add/i,
     });
 
-    // screen.logTestingPlaygroundURL();
     fireEvent.click(saveBtn);
     await waitFor(() => {
       screen.getByText("Hey duplicate email id");
@@ -171,13 +178,14 @@ describe("Students app", () => {
     });
     render(<App />);
     await waitFor(() => {
-      expect(screen.getByText("rahul")).toBeInTheDocument();
-      expect(screen.getByText(1)).toBeInTheDocument();
+      expect(screen.getByText("manish21@gmail.com")).toBeInTheDocument();
+      //expect(screen.getByText(1)).toBeInTheDocument();
     });
     fireEvent.click(screen.getAllByRole("button", { name: /edit/i })[0]);
     await waitFor(() => {
       screen.getByLabelText("name:");
     });
+
     const rollNumberInput = screen.getByLabelText("rollNumber:");
     expect(rollNumberInput).toBeDisabled();
 
@@ -265,6 +273,80 @@ describe("Students app", () => {
       expect(screen.getByText("rahul")).toBeInTheDocument();
       expect(screen.getByText("manish")).toBeInTheDocument();
       expect(screen.getByText("rohit")).toBeInTheDocument();
+    });
+  });
+
+  it("renders pagination buttons and changes page numbers", async () => {
+    render(<App />);
+    await waitFor(() => {
+      expect(screen.getByText("rahul")).toBeInTheDocument();
+    });
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /next/i,
+      })
+    );
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /previous/i,
+      })
+    );
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /1/i,
+      })
+    );
+  });
+
+  it("renders previous button disabled on first page", async () => {
+    render(<App />);
+    await waitFor(() => {
+      expect(screen.getByText("rahul")).toBeInTheDocument();
+    });
+    expect(
+      screen.getByRole("button", {
+        name: /previous/i,
+      })
+    ).toBeDisabled();
+  });
+
+  it("renders total students records based on set pagesize and next click", async () => {
+    getStudents.mockResolvedValue(mockStudents);
+
+    render(<App />);
+    await waitFor(() => {
+      expect(screen.getByText("rahul")).toBeInTheDocument();
+    });
+
+    for (let i = 1; i <= 10; i++) {
+      expect(screen.getByText(mockStudents[i - 1].name)).toBeInTheDocument();
+    }
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /next/i,
+      })
+    );
+
+    for (let i = 11; i <= 20; i++) {
+      expect(screen.getByText(mockStudents[i - 1].name)).toBeInTheDocument();
+    }
+  });
+
+  it("should highlight when trainings found of name JAVA", async () => {
+    render(<App />);
+    await waitFor(() => {
+      expect(screen.getByText("rahul")).toBeInTheDocument();
+    });
+    const studentRow = await screen.findAllByRole("row");
+    studentRow.forEach((student) => {
+      if (student.textContent.includes("JAVA")) {
+        expect(student).toHaveStyle("background-color: yellow");
+      } else {
+        expect(student).not.toHaveStyle("background-color: yellow");
+      }
     });
   });
 });

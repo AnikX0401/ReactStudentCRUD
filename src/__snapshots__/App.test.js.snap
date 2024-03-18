@@ -39,6 +39,9 @@ exports[`Students app render students data on fetching 1`] = `
       <button>
         Search
       </button>
+      <p>
+        Total Students: 0
+      </p>
       <table>
         <thead>
           <tr>
@@ -61,14 +64,18 @@ exports[`Students app render students data on fetching 1`] = `
         </thead>
         <tbody />
       </table>
-      <button
-        disabled=""
+      <div
+        class="pagination-buttons"
       >
-        Previous
-      </button>
-      <button>
-        Next
-      </button>
+        <button
+          disabled=""
+        >
+          Previous
+        </button>
+        <button>
+          Next
+        </button>
+      </div>
       <select>
         <option
           value="10"
@@ -86,6 +93,7 @@ exports[`Students app render students data on fetching 1`] = `
           30
         </option>
       </select>
+      Paged: 0
     </div>
   </div>
 </DocumentFragment>

@@ -1,9 +1,10 @@
+import { render } from "@testing-library/react";
 import { addStudents, editStudent, getStudents } from "./components/service";
 
 describe("service", () => {
   global.fetch = jest.fn();
   describe("get students", () => {
-    test("getStudents call the fetch with URL", async () => {
+    it("getStudents call the fetch with URL", async () => {
       fetch.mockResolvedValueOnce({
         json: jest.fn().mockResolvedValue([]),
       });
@@ -11,7 +12,7 @@ describe("service", () => {
       expect(fetch).toHaveBeenCalledWith("http://localhost:5555/students");
     });
 
-    test("getStudents call the fetch and return error", async () => {
+    it("getStudents call the fetch and return error", async () => {
       fetch.mockRejectedValue({
         json: jest.fn().mockResolvedValue([]),
       });
@@ -27,7 +28,7 @@ describe("service", () => {
 
 describe("service", () => {
   describe("add student", () => {
-    test("addStudents should call the fetch and return students", async () => {
+    it("addStudents should call the fetch and return students", async () => {
       var myHeaders = new Headers();
       const mockStudents = [
         {
@@ -54,7 +55,7 @@ describe("service", () => {
   });
 });
 
-test("addStudents should call the fetch and return error", async () => {
+it("addStudents should call the fetch and return error", async () => {
   var myHeaders = new Headers();
   const mockStudent = {
     name: "rahul",
@@ -80,7 +81,7 @@ test("addStudents should call the fetch and return error", async () => {
 
 describe("service component", () => {
   describe("edit student", () => {
-    test("edit students should call the fetch and edit students", async () => {
+    it("edit students should call the fetch and edit students", async () => {
       var myHeaders = new Headers();
       const mockStudent = [
         {
@@ -109,7 +110,7 @@ describe("service component", () => {
     });
   });
 
-  test("edit students should call the fetch and render error", async () => {
+  it("edit students should call the fetch and render error", async () => {
     var myHeaders = new Headers();
     const mockStudent = [
       {
@@ -138,4 +139,6 @@ describe("service component", () => {
       error: "failed",
     });
   });
+
+  
 });

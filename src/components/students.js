@@ -9,6 +9,7 @@ const Students = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [filteredStudents, setFilteredStudents] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
   const [currentStudents, setCurrentStudents] = useState([]);
   const navigate = useNavigate();
   const onEditStudent = (student) => {
@@ -43,6 +44,11 @@ const Students = () => {
   }, [studentState, search]);
 
   useEffect(() => {
+    const pages = Math.ceil(studentState.length / pageSize);
+    setTotalPages(pages);
+  }, [pageSize, studentState]);
+
+  useEffect(() => {
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
     const currentStudents = filteredStudents.slice(startIndex, endIndex);
@@ -67,8 +73,31 @@ const Students = () => {
     setCurrentPage((prevPage) => prevPage - 1);
   };
   const handlePageSize = (size) => {
+    setTotalPages(size);
     setPageSize(size);
     setCurrentPage(1);
+  };
+
+  const renderPages = () => {
+    const pageElements = [];
+    for (let i = 1; i <= totalPages; i++) {
+      const button = (
+        <button
+          onClick={() => {
+            setCurrentPage(i);
+          }}
+          disabled={currentPage === i}
+        >
+          {i}
+        </button>
+      );
+      pageElements.push(button);
+    }
+    return pageElements;
+  };
+
+  const rowBackgroundColor = (student) => {
+    return student.trainings.includes("JAVA") ? "yellow" : "white";
   };
 
   return (
@@ -82,6 +111,7 @@ const Students = () => {
       ></input>
       <button onClick={() => setSearch(search)}>Search</button>
       {!filteredStudents.length && search && <h2>No data found!</h2>}
+      <p>Total Students: {filteredStudents.length}</p>
       <table>
         <thead>
           <tr>
@@ -95,7 +125,11 @@ const Students = () => {
         <tbody>
           {filteredStudents.length > 0 &&
             currentStudents.map((student, index) => (
-              <tr key={`${student?.email}_${index}`} data-testid="student-row">
+              <tr
+                key={`${student?.email}_${index}`}
+                data-testid="student-row"
+                style={{ backgroundColor: rowBackgroundColor(student) }}
+              >
                 <td>{student.name}</td>
                 <td>{student.rollNumber}</td>
                 <td>
@@ -122,15 +156,20 @@ const Students = () => {
             ))}
         </tbody>
       </table>
-      <button onClick={handlePrevClick} disabled={currentPage === 1}>
-        Previous
-      </button>
-      <button
-        onClick={handleNextClick}
-        disabled={currentPage === Math.ceil(filteredStudents.length / pageSize)}
-      >
-        Next
-      </button>
+      <div className="pagination-buttons">
+        <button onClick={handlePrevClick} disabled={currentPage === 1}>
+          Previous
+        </button>
+        {renderPages()}
+        <button
+          onClick={handleNextClick}
+          disabled={
+            currentPage === Math.ceil(filteredStudents.length / pageSize)
+          }
+        >
+          Next
+        </button>
+      </div>
       <select
         onChange={(e) => {
           handlePageSize(e.target.value);
@@ -140,6 +179,7 @@ const Students = () => {
         <option value={"20"}>20</option>
         <option value={"30"}>30</option>
       </select>
+      Paged: {totalPages}
     </div>
   );
 };

@@ -12,8 +12,8 @@ body{
 }
 
 .student-list{
-  padding: 30px;
-  text-align: center;
+  padding: 35px;
+  padding-top: 10px;
 } 
 
 .name{
@@ -74,6 +74,25 @@ li{
   background-color: #edc4adf0;
 }
 
+.pagination-buttons{
+  margin-top: 10px;
+}
+
+.pagination-buttons button{
+  margin-right: 6px;
+
+}
+
+select{
+  padding: 3px;
+  margin-right: 10px;
+
+}
+
+.paged-text{
+  margin-right: 10px;
+
+}
 
 
 
